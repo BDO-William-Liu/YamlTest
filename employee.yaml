@@ -2,9 +2,15 @@
     name: Martin D'vloper
     job: Developer
     skills:
-      - python
-      - perl
-      - pascal
+      - python:
+        - test1
+        - test2
+      - perl:
+        - test3
+        - test4
+      - pascal:
+        - test5
+        - test6
 - tabitha:
     name: Tabitha Bitumen
     job: Developer
