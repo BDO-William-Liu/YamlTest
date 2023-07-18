@@ -2,3 +2,7 @@
   test: "lets go"
   name: "william"
   age: "20"
+  address:
+    street: "1215 Fake Street"
+    city: "Mississauga",
+    province: "Ontario"
