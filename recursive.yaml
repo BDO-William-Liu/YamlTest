@@ -4,5 +4,5 @@
   age: "20"
   address:
     street: "1215 Fake Street"
-    city: "Mississauga",
+    city: "Mississauga"
     province: "Ontario"
