@@ -1,17 +1,4 @@
 ---
   test: "lets go"
-  array: 
-    - inner1:
-      - inner11:
-        - "inner111"
-        - "inner112"
-      - inner12:
-        - "inner121"
-        - "inner122"
-      - inner13:
-        - inner131:
-          - "inner1311"
-          - inner1312:
-            - "inner13121"
-    - inner2:
-      - "inner21"
+  name: "william"
+  age: "20"
