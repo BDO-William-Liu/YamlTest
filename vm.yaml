@@ -1,0 +1,93 @@
+---
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  annotations:
+    kubevirt.io/latest-observed-api-version: v1
+    kubevirt.io/storage-observed-api-version: v1
+    name.os.template.kubevirt.io/fedora32: Fedora 31 or higher
+  name: <vm-name>
+  generation: 1
+  namespace: default
+spec:
+  dataVolumeTemplates:
+    - apiVersion: cdi.kubevirt.io/v1
+      kind: DataVolume
+      metadata:
+        name: <vm-name>
+      spec:
+        pvc:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 250Gi
+          storageClassName: <storage-class name>
+          volumeMode: Filesystem
+        source:
+          http:
+            url: >-
+              <qcow2 image url>
+  running: true
+  template:
+    metadata:
+      labels:
+        kubevirt.io/size: large
+        os.template.kubevirt.io/fedora32: 'true'
+        workload.template.kubevirt.io/desktop: 'true'
+    spec:
+      domain:
+        cpu:
+          cores: 8
+          sockets: 1
+          threads: 1
+        devices:
+          autoattachPodInterface: false
+          disks:
+            - bootOrder: 1
+              disk:
+                bus: virtio
+              name: rootdisk
+            - disk:
+                bus: virtio
+              name: cloudinitdisk
+          inputs:
+            - bus: virtio
+              name: tablet
+              type: tablet
+          interfaces:
+            - bridge: {}
+              model: virtio
+              name: nic-0
+            - bridge: {}
+              model: virtio
+              name: nic-1
+            - bridge: {}
+              model: virtio
+              name: nic-2
+          networkInterfaceMultiqueue: true
+        resources:
+          requests:
+            memory: 64Gi
+      evictionStrategy: LiveMigrate
+      networks:
+        - multus:
+            networkName: <network-attachment-definition-1>
+          name: nic-0
+        - multus:
+            networkName: <network-attachment-definition-2>
+          name: nic-1
+        - multus:
+            networkName: <network-attachment-definition-2>
+          name: nic-2
+      terminationGracePeriodSeconds: 180
+      volumes:
+        - dataVolume:
+            name: <vm-name>
+          name: rootdisk
+        - cloudInitNoCloud:
+            userData: |-
+              #infoblox-config
+              temp_license: nios IB-V2225 enterprise dns dhcp
+              remote_console_enabled: y
+          name: cloudinitdisk
